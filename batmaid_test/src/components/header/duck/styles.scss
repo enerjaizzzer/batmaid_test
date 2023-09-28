@@ -1,0 +1,6 @@
+@import "../../../duck/styles";
+
+.header {
+  @include bold-text();
+  @include default-paddings;
+}

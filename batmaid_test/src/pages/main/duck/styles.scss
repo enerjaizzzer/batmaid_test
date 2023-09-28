@@ -1,0 +1,5 @@
+@import '../../../duck/styles';
+
+.main-container {
+  @include default-paddings;
+}

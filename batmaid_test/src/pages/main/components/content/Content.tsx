@@ -2,12 +2,15 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as C from "../../../../components";
 import * as LD from "./duck";
+import * as LC from "./components";
 import "./duck/styles.scss";
 import { save } from "../../../../duck/cleanings";
 
 const Content = () => {
   const [mode, setMode] = React.useState<string>(LD.consts.defaultMode);
-  const { cleanings } = useSelector((state: any) => state.cleanings);
+  const { cleanings } = useSelector((state: LD.types.CleaningsReduxFetch) => {
+    return state;
+  });
   const dispatch = useDispatch();
 
   const handleOnChange = (newMode: string) => {
@@ -19,11 +22,11 @@ const Content = () => {
       .then((response) => {
         return response.json();
       })
-      .then((data) => dispatch(save(data)))
+      .then((data: LD.types.CleaningsFetch) => {
+        return dispatch(save(data));
+      })
       .catch((e) => console.log(e.message, e));
   }, []);
-
-  console.log(cleanings);
 
   return (
     <div className={"content-container"}>
@@ -32,7 +35,7 @@ const Content = () => {
         checkedItem={mode}
         onChange={handleOnChange}
       />
-      <C.Table />
+      <LC.Table data={cleanings.data.jobs} mode={mode} />
     </div>
   );
 };

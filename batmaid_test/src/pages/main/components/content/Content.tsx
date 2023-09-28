@@ -26,7 +26,9 @@ const Content = () => {
       .then((data: LD.types.CleaningsFetch) => {
         return dispatch(save(data));
       })
-      .catch((e) => console.log(e.message, e));
+      .catch((e) => {
+        throw new Error(`Fetch error. Details: ${e.message}`);
+      });
   }, []);
 
   return (

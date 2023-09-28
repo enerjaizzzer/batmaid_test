@@ -7,6 +7,12 @@ import { ColumnsType } from "antd/es/table";
 import * as _ from "lodash";
 
 const Table: React.FC<LD.types.TableProps> = ({ data, mode }) => {
+  const locations = new Set();
+
+  React.useEffect(() => {
+    locations.clear();
+  }, []);
+
   const columns: ColumnsType<LD.types.Job> = React.useMemo(() => {
     if (data?.length) {
       return [
@@ -14,13 +20,35 @@ const Table: React.FC<LD.types.TableProps> = ({ data, mode }) => {
           title: "Address",
           dataIndex: "location",
           key: "location",
-          // @ts-ignore
+          onCell: (record, index) => {
+            const props: { rowSpan?: number } = {
+              rowSpan: undefined,
+            };
+
+            if (locations.has(record.location) && !locations.has(index)) {
+              props.rowSpan = 0;
+            } else {
+              props.rowSpan = data?.filter(
+                (elem) => elem.location === record.location,
+              ).length;
+              console.log(
+                "props.rowSpan = 1",
+                locations,
+                record.location,
+                index,
+              );
+              locations.add(index);
+            }
+            locations.add(record.location);
+
+            return props;
+          },
         },
         {
           title: "Type",
           dataIndex: "type",
           key: "type",
-          render: (type: string) => {
+          render: (type) => {
             return _.startCase(_.toLower(type));
           },
         },
@@ -54,8 +82,6 @@ const Table: React.FC<LD.types.TableProps> = ({ data, mode }) => {
       return [];
     }
   }, [data]);
-
-  console.log(columns);
 
   const filteredData = data?.filter((record) => {
     if (mode === "previous") {

@@ -1,0 +1,6 @@
+@import "../../../duck/styles";
+
+.radio-container {
+  @include flex-container($jc: 'flex-start');
+  margin-bottom: 20px;
+}

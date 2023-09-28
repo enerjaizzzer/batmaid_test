@@ -5,6 +5,7 @@ import * as LD from "./duck";
 import * as LC from "./components";
 import "./duck/styles.scss";
 import { save } from "../../../../duck/cleanings";
+import { Skeleton } from "antd";
 
 const Content = () => {
   const [mode, setMode] = React.useState<string>(LD.consts.defaultMode);
@@ -35,7 +36,11 @@ const Content = () => {
         checkedItem={mode}
         onChange={handleOnChange}
       />
-      <LC.Table data={cleanings.data.jobs} mode={mode} />
+      {cleanings.data.jobs?.length ? (
+        <LC.Table data={cleanings.data.jobs} mode={mode} />
+      ) : (
+        <Skeleton />
+      )}
     </div>
   );
 };
